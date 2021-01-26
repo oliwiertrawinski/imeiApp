@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}IMEI Checker{% endblock %}</title>
+
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #7abecc !important;
+        }
+
+        .nav li {
+            display: inline-block;
+        }
+
+        .dropdown-container {
+            position: relative;
+        }
+
+        #form-title {
+            color: #22a3cc;
+
+        }
+
+        .input-group-text {
+            background: #f7ba5b !important;
+            color: white !important;
+            border: 0 !important;
+            border-radius: 0.25rem 0 0 0.25rem !important;
+        }
+
+        .input_user,
+        .input_pass:focus {
+            box-shadow: none !important;
+            outline: 0px !important;
+        }
+
+        #messages {
+            background-color: grey;
+            color: #fff;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
+
+    <link href="https://fonts.googleapis.com/css?family=Clicker+Script" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+    <script src="http://maps.google.com/maps/api/js?sensor=false"
+            type="text/javascript"></script>
+
+
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/map.css' %}">
+    {% block header %}
+    {% endblock %}
+</head>
+<body>
+
+
+<div class="row justify-content-center">
+    <div class="col-md-10 col-sm-12">
+        <div class="container-fluid  text-light">
+            <h3 class="text-center">IMEI Checker</h3>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+            <a href="{% url 'imeiApp:home' %}" class="navbar-brand">
+                <!-- Logo Image -->
+                <img src="#" width="50" alt=""
+                     class="d-inline-block align-middle mr-2">
+            </a>
+
+            <ul class="navbar-nav mr-auto">
+                <li>
+                    <a class="nav-link text-info" href="{% url 'imeiApp:home' %}">Home<span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <div class="dropdown-container">
+                    <li>
+                        <a class="nav-link dropdown-toggle text-info" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Actions</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% if user.is_authenticated %}
+                                {% if user.is_superuser %}
+                                    <a class="dropdown-item text-info" href="/admin">Modify Data</a>
+                                {% else %}
+                                    <a class="dropdown-item text-info" href="{% url 'imeiApp:check_imei' %}">Check IMEI
+                                        number</a>
+                                    <a class="dropdown-item text-info" href="{% url 'imeiApp:phone_base' %}">Phone
+                                        Database</a>
+                                    <a class="dropdown-item text-info" href="{% url 'imeiApp:report_theft' %}">Report
+                                        stolen phone</a>
+                                    <a class="dropdown-item text-info" href="{% url 'imeiApp:map_stolen_phones' %}">
+                                        Map</a>
+                                {% endif %}
+                            {% else %}
+                                <a class="dropdown-item text-info" href="{% url 'imeiApp:check_imei' %}">Check IMEI number</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                </div>
+                <li>
+                    <a class="nav-link text-info" href="#">My Account</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                {% if user.is_authenticated %}
+                    <p class="pt-3">Logged in as <strong>{{ user.username }}</strong> <a
+                            class="btn btn-outline-info my-2 my-sm-0"
+                            href="{% url 'imeiApp:logout' %}">Log out</a></p>
+                {% else %}
+                    <a href="{% url 'imeiApp:login' %}"
+                       class="btn btn-outline-info my-2 my-sm-0" role="button">Login</a>
+                    <a href="{% url 'imeiApp:register' %}"
+                       class="btn btn-outline-info my-2 my-sm-0" role="button">Sign up</a>
+                {% endif %}
+            </form>
+        </nav>
+        <div class="card mb-3">
+            <div class="card-body">
+                <!--              {% for message in messages %}-->
+                    <!--                <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">-->
+                    <!--                  {{ message }}-->
+                    <!--                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
+                    <!--                    <span aria-hidden="true">&times;</span>-->
+                    <!--                  </button>-->
+                    <!--                </div>-->
+                    <!--              {% endfor %}-->
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+        <footer>
+        </footer>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    })
+</script>
+<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script>
+
+</body>
+</html>

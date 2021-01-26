@@ -1,0 +1,47 @@
+{% extends 'imeiApp/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <h3 id="form-title">Phone database</h3>
+    </div>
+
+    <table id="myTable" class="table table-striped table-bordered" style="width:100%">
+        <thead id="phoneTableHeaders">
+        <tr>
+            <th scope="col">Brand</th>
+            <th scope="col">Model</th>
+            <th scope="col">Announced</th>
+            {#                        <th scope="col">Internal_memory</th>#}
+            {#                        <th scope="col">RAM</th>#}
+            {#                        <th scope="col">Primary_camera</th>#}
+            {#                        <th scope="col">Secondary_camera</th>#}
+
+        </tr>
+        </thead>
+        <tbody id="myTable">
+        {% if phones %}
+            {% for phone in phones %}
+
+                <tr onclick="window.location='/phone_details/{{ phone.id }}/';">
+                    <td>{{ phone.Brand }}</td>
+                    <td>{{ phone.Model }}</td>
+                    <td>{{ phone.Announced }}</td>
+                    {#                                <td>{{ phone.Internal_memory }}</td>#}
+                    {#                                <td>{{ phone.RAM }}</td>#}
+                    {#                                <td>{{ phone.Primary_camera }}</td>#}
+                    {#                                <td>{{ phone.Secondary_camera }}</td>#}
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+        <tfoot>
+        <tr>
+            <th scope="col">Brand</th>
+            <th scope="col">Model</th>
+            <th scope="col">Announced</th>
+        </tr>
+        </tfoot>
+    </table>
+
+
+{% endblock %}

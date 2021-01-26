@@ -1,0 +1,74 @@
+{#{% load static %}#}
+{#<!DOCTYPE html>#}
+{##}
+{#<html>#}
+{#<head>#}
+{#    <link data-require="leaflet@0.7.3" data-semver="0.7.3" rel="stylesheet"#}
+{#          href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css"/>#}
+{#    <link rel="stylesheet" href="{% static 'css/map.css' %}"/>#}
+{#</head>#}
+{#<body>#}
+{#<div>#}
+{#    <form method="POST">#}
+{#        {% csrf_token %}#}
+{#        <label for="latitude">Latitude:</label>#}
+{#        <input id="latitude" name="latitude" type="text"/>#}
+{#        <label for="longitude">Longitude:</label>#}
+{#        <input id="longitude" name="longitude" type="text"/>#}
+{#        <label for="describe">Describe:</label>#}
+{#        <input id="describe" name="describe" type="text"/>#}
+{#        <button type="submit" class="btn btn-outline-info submit-btn  pull-right">Submit</button>#}
+{#    </form>#}
+{#    <div id="map" style="width: 500px; height: 400px;"></div>#}
+{#    <script data-require="leaflet@0.7.3" data-semver="0.7.3"#}
+{#            src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>#}
+{#    <script src="{% static 'js/report.js' %}"></script>#}
+{#</div>#}
+{#</body>#}
+{#</html>#}
+
+{% extends 'imeiApp/base.html' %}
+{% load static %}
+{% block header %}
+    <link data-require="leaflet@0.7.3" data-semver="0.7.3" rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css"/>
+    <link rel="stylesheet" href="{% static 'css/map.css' %}"/>
+{% endblock %}
+{% block content %}
+    <div class="d-flex justify-content-center">
+        <h3 id="form-title">Here you can report stolen phone</h3>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <form method="POST">
+                {% csrf_token %}
+                <input class='invisible' id="latitude" name="latitude" type="text"/>
+                <input class='invisible' id="longitude" name="longitude" type="text"/>
+                <label for="describe">Imei number:</label>
+                <input type="text" class="form-control imei-input" id="id_imei" minlength="11" maxlength="11"
+                       pattern="[0-9]*" name="imei"
+                       required="required" title="" type="text" placeholder="Enter IMEI number e.g. 123456789012347"
+                       aria-label="Recipient's username"
+                       aria-describedby="basic-addon2">
+                <button type="submit" class="btn btn-outline-info submit-btn  pull-right">Submit</button>
+            </form>
+            <div class="d-flex justify-content-center links">
+                {% for message in messages %}
+                    <p id="messages">{{ message }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col">
+            <div id="map" style="width: 500px; height: 400px;"></div>
+        </div>
+    </div>
+
+
+
+
+    <script data-require="leaflet@0.7.3" data-semver="0.7.3"
+            src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+    <script src="{% static 'js/report.js' %}"></script>
+    </div>
+{% endblock %}
