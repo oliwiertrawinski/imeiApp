@@ -5,7 +5,6 @@ import json
 import random
 import pandas as pd
 from faker import Faker
-from imeiApp.models import Imei_numbers, Phone_brands, User
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ImeiChecker.settings')
 
@@ -15,88 +14,11 @@ django.setup()
 logging.basicConfig(level=logging.INFO)
 fakegen = Faker()
 
+from imeiApp.models import Imei_numbers, Phone_brands, User
+
 from collections import OrderedDict
 
 PATH_TO_SAMPLE_DATA = "utils/sample_data/"
-
-old_file_name = 'Dataset_Cell_Phones_Model_Brand.json'
-brands_file_name = '01-PHONE_BRANDS.json'
-imei_numbers_file_name = '02-IMEI_NUMBERS.json'
-
-
-def removeKeys():
-    data = getJsonObject(PATH_TO_SAMPLE_DATA + old_file_name)
-
-    dict = []
-    i = 1
-
-    for i in range(1, 400):
-        phone = data['results'][i]
-        phone.pop('Cell_Phone_Brands', None)
-        phone.pop('Cell_Phone_Models', None)
-        # phone['objectId'] = i
-        dict.append(phone)
-
-    print(i)
-    with open(PATH_TO_SAMPLE_DATA + brands_file_name, 'w') as json_file:
-        json.dump(dict, json_file, indent=40)
-
-
-def getJsonObject(path):
-    with open(path) as f:
-        data = json.load(f)
-    return data
-
-
-def getIds(path):
-    list = getJsonObject(path)
-    ids = []
-    for phone in list:
-        ids.append(phone.get('objectId'))
-
-    return ids
-
-
-def random_with_N_digits(n):
-    range_start = 10 ** (n - 1)
-    range_end = (10 ** n) - 1
-    return random.randint(range_start, range_end)
-
-
-def createImeiJsonFile(rowsNumber):
-    ids = getIds(PATH_TO_SAMPLE_DATA + brands_file_name)
-    keys = ['ImeiNumber', 'FK-PHONE_BRANDS-IdPhoneModel']
-    chosenIds = []
-    for i in range(0, rowsNumber):
-        chosenIds.append(random.choice(ids))
-    print(ids)
-    chosenImeis = []
-    dict = []
-
-    for i in range(0, rowsNumber):
-        imei = random_with_N_digits(11)
-        if (imei not in chosenImeis):
-            chosenImeis.append(imei)
-
-    fields = {
-        'Imeis': chosenImeis,
-        'Ids': chosenIds,
-    }
-
-    for i in range(0, rowsNumber):
-        dict.append({keys[0]: chosenImeis[i], keys[1]: chosenIds[i]})
-
-    with open(PATH_TO_SAMPLE_DATA + imei_numbers_file_name, 'w') as json_file:
-        json.dump(dict, json_file, indent=2)
-
-
-def fill_db1():
-    with open(PATH_TO_SAMPLE_DATA + imei_numbers_file_name, encoding='utf-8') as data_file:
-        json_data = json.loads(data_file.read())
-
-        for brand_data in json_data:
-            Imei_numbers.objects.get_or_create(**brand_data)
-
 
 MODEL_OBJECT_MAPPINGS = {
     "PHONE_BRANDS": Phone_brands,

@@ -5,9 +5,15 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 {% endblock %}
 {% block content %}
-<div>
-    <div id="map" style="width: 500px; height: 400px;"></div>
-         {{ markers|json_script:"markers-data" }}
-  <script src="{% static 'js/map.js' %}"></script>
-</div>
+    <div class="d-flex justify-content-center">
+        <h3 id="form-title">Map of stolen phones</h3>
+    </div>
+    <br>
+    <div>
+        <div id="map" class="container col-lg-11 align-content-center" style="width: 1200px; height: 400px;">
+            {{ markers|json_script:"markers-data" }}
+            <script src="{% static 'js/map.js' %}"></script>
+        </div>
+    </div>
+    <br>
 {% endblock %}

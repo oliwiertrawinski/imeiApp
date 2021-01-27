@@ -6,14 +6,19 @@
         <div class="row">
             <div class="col">
                 {% if user.is_authenticated %}
-                    <h2>Witaj ponownie {{ user.username }}!</h2>
+                    <h2>Welcome back {{ user.username }}!</h2>
                 {% else %}
-                    <h2>Witamy na naszej stronie!</h2>
+                    <h2>Welcome on our site!</h2>
                 {% endif %}
-                <h4>blablabla</h4>
+                <br>
+                <br>
+
+                <h4>Every mobile phone, GSM modem or device with a built-in phone / modem has a unique 15 digit IMEI
+                    number. Based on this number, you can check some information about the device, eg brand or
+                    model.</h4>
             </div>
             <div class="col">
-                <img src="#" class="img-fluid" alt="Responsive image">
+                <img src="{% static '/images/home_image.jpg' %}" class="img-fluid" alt="Responsive image">
             </div>
         </div>
     </div>

@@ -1,6 +1,7 @@
 from django.contrib.gis.db.models import PointField
 from django.db import models
 from django.contrib import auth
+from datetime import datetime
 #from geoposition.fields import GeopositionField
 from django.utils import timezone
 
@@ -73,6 +74,7 @@ class Stolen_markers(models.Model):
     owner = models.ForeignKey(auth.models.User, on_delete=models.PROTECT, related_name="owner", null=False, db_constraint=False)
     imei = models.ForeignKey(Imei_numbers, on_delete=models.CASCADE, related_name="stolen_phone", null=False, db_constraint=False)
     location = PointField()
+    date = models.DateTimeField(default=datetime.now, blank=True)
 
     def __str__(self):
         return f"Name: {self.owner}; imei: {self.imei.ImeiNumber}; location: {self.location}"

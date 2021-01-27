@@ -1,8 +1,9 @@
 from django.contrib import messages
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.gis.geos import Point
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 from .forms import  CreateUserForm
@@ -81,18 +82,9 @@ def check_imei(request):
             return HttpResponseRedirect(request.path_info)
 
         if  len(Stolen_markers.objects.filter(imei__ImeiNumber=nr_imei)) !=0:
-            messages.success(request, 'This phone is stolen')
+            messages.success(request, 'This phone has been stolen!')
 
-        # fields = phone._meta.get_fields()
-        # tuple_list = []
-        #
-        # for i in range(3,30):
-        #     field_name = fields[i].name
-        #     field_content = getattr(phone, field_name)
-        #     tuple_list.append((field_name, field_content))
-        # context = {'fields_tuple_list':tuple_list}
-        # return render(request, 'imeiApp/phone_details.html', context)
-        #request.session['model_id']=phone.id
+
         return redirect('imeiApp:phone_details', model_id=phone.id )
 
 
@@ -167,3 +159,20 @@ def report_stolen_phone(request):
         return HttpResponseRedirect(request.path_info)
 
     return render(request, 'imeiApp/get_marker.html')
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('imeiApp:home')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'imeiApp/change_password.html', {
+        'form': form
+    })
