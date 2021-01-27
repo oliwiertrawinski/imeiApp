@@ -87,18 +87,10 @@ def fill_db(path_to_sample_data=PATH_TO_SAMPLE_DATA):
             table_object.objects.get_or_create(**kwargs)
 
 
-# removeKeys()
-# createImeiJsonFile(100)
-
-# createImeiJsonFile(100)
-
 if __name__ == '__main__':
-    # uruchom 5 ponizsze linijki
     logging.info("Populating the databases...Please Wait")
     fill_db()
     create_superuser()
     populate_users(5)
     logging.info('Populating Complete')
 
-    # removeKeys()
-    # createImeiJsonFile(200 )
